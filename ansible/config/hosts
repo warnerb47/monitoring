@@ -1,5 +1,5 @@
 [masters]
-master ansible_host=18.216.17.9
+master ansible_host=192.168.33.20
 
 
 
