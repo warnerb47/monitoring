@@ -1,0 +1,13 @@
+---
+- hosts: master
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: retrieve the stack yaml for portainer
+      get_url:
+        url: https://downloads.portainer.io/portainer-agent-stack.yml
+        dest: /opt/portainer-agent-stack.yml
+    - name: Deploy portainer stack from a /opt/portainer-agent-stack.yml file
+      command: docker stack deploy -c /opt/portainer-agent-stack.yml portainer
+      run_once: true
+      register: portainer
