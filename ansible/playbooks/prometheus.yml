@@ -1,0 +1,17 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: create /etc/prometheus directory
+      file:
+        path: /etc/prometheus
+        state: directory
+    - name: remove prometheus old config
+      file:
+        path: '/etc/prometheus/prometheus.yml'
+        state: absent
+    - name: copy new prometheus config
+      template:
+        src: ./prometheus.yml.j2
+        dest: /etc/prometheus/prometheus.yml

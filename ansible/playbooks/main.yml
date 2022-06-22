@@ -2,3 +2,4 @@
 - import_playbook: docker.yml
 - import_playbook: cluster.yml
 - import_playbook: portainer.yml
+- import_playbook: prometheus.yml
