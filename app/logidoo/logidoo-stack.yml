@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  logidoo_webapp:
+    image:  warnerb47/web-app:1.0.3
+    ports:
+      - "80:80"
+    deploy:
+      replicas: 1
+  logidoo_backend:
+    image: warnerb47/api:latest
+    ports:
+      - "5000:9000"
+    deploy:
+      replicas: 1

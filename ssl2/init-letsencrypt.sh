@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(staging.weflex.shop)
+domains=(staging.weflex.shop api.weflex.shop)
 rsa_key_size=4096
 data_path="/home/admin/ssl2/data/certbot"
 email="taphagaye2001.mg@gmail.com" # Adding a valid address is strongly recommended

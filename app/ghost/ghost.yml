@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  ghost:
+    image: ghost:latest
+    ports:
+      - "2368:2368"
+    deploy:
+      replicas: 1
