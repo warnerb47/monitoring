@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  nginx:
+    restart: always
+    image: nginx
+    hostname: example.com
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /data/nginx:/etc/nginx:ro
+      - /data/letsencrypt/conf:/etc/letsencrypt
+      - /data/letsencrypt/html:/tmp/letsencrypt
+      - /etc/nginx/sites-avaible/vhost.conf:/etc/nginx/sites-avaible/vhost.conf
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - LE_RENEW_HOOK=docker kill -s HUP @CONTAINER_NAME@
+
+letsencrypt:
+  restart: always
+  image: vdhpieter/letsencrypt-webroot
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /data/letsencrypt/conf:/etc/letsencrypt
+    - /data/letsencrypt/html:/tmp/letsencrypt
+  links:
+    - nginx
+  environment:
+    - DOMAINS=example.com www.example.com
+    - EMAIL=your@email.tld
+    - WEBROOT_PATH=/tmp/letsencrypt
+    - EXP_LIMIT=30
+    - CHECK_FREQ=30
+    - CHICKENEGG=1
+    - STAGING=0
+
+# docker-compose -p nginx up --build -d
+# docker stack deploy -c docker-compose.yml nginx

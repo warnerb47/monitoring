@@ -1,14 +1,14 @@
 version: '3.8'
 
 services:
-  web:
-    image: warnerb47/zoom-clone:staging_latest
-    ports:
-      - "5000:5000"
-    deploy:
-      replicas: 2
-  proxy:
-    image: nginx:1.23.0
+  # zoom-clone:
+  #   image: warnerb47/zoom-clone:staging_latest
+  #   ports:
+  #     - "5000:5000"
+  #   deploy:
+  #     replicas: 1
+  logidoo_webapp:
+    image:  485711831901.dkr.ecr.us-east-1.amazonaws.com/ecommerce_logidoo_webapp:latest
     volumes:
       - /data/nginx:/etc/nginx/conf.d
     ports:
@@ -17,3 +17,19 @@ services:
       replicas: 1
       placement:
         constraints: [node.role == manager]
+  logidoo_backend:
+    image: 485711831901.dkr.ecr.us-east-1.amazonaws.com/ecommerce_logidoo_backend:latest
+    ports:
+      - "5050:9000"
+    deploy:
+      replicas: 1
+  # proxy:
+  #   image: nginx:1.23.0
+  #   volumes:
+  #     - /data/nginx:/etc/nginx/conf.d
+  #   ports:
+  #     - "80:80"
+  #   deploy:
+  #     replicas: 1
+  #     placement:
+  #       constraints: [node.role == manager]
