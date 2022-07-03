@@ -1,1 +1,3 @@
-# Getting start with prometheus and grafana
+# Making Monitoring using:
+- Grafana and Prometheus for server monitoring
+- ELK for logging 
