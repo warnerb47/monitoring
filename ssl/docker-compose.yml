@@ -1,39 +1,22 @@
-version: '3.8'
+version: '3'
 services:
   nginx:
-    restart: always
-    image: nginx
-    hostname: example.com
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /data/nginx:/etc/nginx:ro
-      - /data/letsencrypt/conf:/etc/letsencrypt
-      - /data/letsencrypt/html:/tmp/letsencrypt
-      - /etc/nginx/sites-avaible/vhost.conf:/etc/nginx/sites-avaible/vhost.conf
+    image: nginx:1.15-alpine
     ports:
-      - 80:80
-      - 443:443
-    environment:
-      - LE_RENEW_HOOK=docker kill -s HUP @CONTAINER_NAME@
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /home/admin/ssl2/nginx:/etc/nginx/conf.d
+      - /home/admin/ssl2/data/certbot/conf:/etc/letsencrypt
+      - /home/admin/ssl2/data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - /home/admin/ssl2/data/certbot/conf:/etc/letsencrypt
+      - /home/admin/ssl2/data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
-letsencrypt:
-  restart: always
-  image: vdhpieter/letsencrypt-webroot
-  volumes:
-    - /etc/localtime:/etc/localtime:ro
-    - /var/run/docker.sock:/var/run/docker.sock
-    - /data/letsencrypt/conf:/etc/letsencrypt
-    - /data/letsencrypt/html:/tmp/letsencrypt
-  links:
-    - nginx
-  environment:
-    - DOMAINS=example.com www.example.com
-    - EMAIL=your@email.tld
-    - WEBROOT_PATH=/tmp/letsencrypt
-    - EXP_LIMIT=30
-    - CHECK_FREQ=30
-    - CHICKENEGG=1
-    - STAGING=0
 
-# docker-compose -p nginx up --build -d
-# docker stack deploy -c docker-compose.yml nginx
+# chmod +x init-letsencrypt.sh
+# sudo ./init-letsencrypt.sh
