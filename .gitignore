@@ -1,3 +1,4 @@
 vms/.vagrant
 ansible/.ssh
 terraform/config.yml
+.ssh

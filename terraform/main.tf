@@ -60,7 +60,7 @@ data "aws_key_pair" "access_key_name" {
   key_name = local.input.access.key_name
 }
 
-# create ec2 inxtancex
+# create ec2 instances
 resource "aws_instance" "ec2_instances" {
   count           = length(data.aws_ami.filtred_amis)
   ami             = data.aws_ami.filtred_amis[count.index].id
@@ -72,7 +72,7 @@ resource "aws_instance" "ec2_instances" {
   }
 }
 
-# print rexult 
+# print result 
 output "ec2_instances_created" {
   value = {
     for k, v in aws_instance.ec2_instances : k => {

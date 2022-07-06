@@ -3,8 +3,8 @@ version: '3'
 services:
   ansible:
     build: .
-    image: warnerb47/swarm-infra:1.0.0
-    container_name: swarm-infra
+    image: warnerb47/monitoring:1.0.0
+    container_name: monitoring
     volumes:
       - C:\\Users\\DELL\\Documents\\practice\\devops\\monitoring\\ansible\\playbooks:/root/playbooks
       - C:\\Users\\DELL\\Documents\\practice\\devops\\monitoring\\ansible\\config:/etc/ansible
@@ -14,5 +14,5 @@ services:
     tty: true
     command: /bin/bash
 
-# docker-compose -p swarm-infra up --build -d
-# docker exec -ti swarm-infra /bin/bash
+# docker-compose -p monitoring up --build -d
+# docker exec -ti monitoring /bin/bash
