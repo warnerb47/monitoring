@@ -7,9 +7,6 @@ volumes:
   grafana-data:
     driver: local
 networks:
-  # frontend:
-  #   external:
-  #     name: imixs-proxy-net 
   monitoring:
 
 services:

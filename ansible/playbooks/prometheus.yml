@@ -13,5 +13,6 @@
         state: absent
     - name: copy new prometheus config
       template:
-        src: ./prometheus.yml.j2
+        # src: ./prometheus.yml.j2
+        src: ./prometheus-cluster.yml.j2
         dest: /etc/prometheus/prometheus.yml
