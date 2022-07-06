@@ -2,9 +2,14 @@
 version: '3.8'
 
 services:
-  node_exporter:
+  ################################################################
+  # The promethes node-exporter 
+  # For each node a separte service need to be added 
+  ################################################################
+  # START NODE-EXPORTERS.....    
+  manager_node_exporter:
     image: quay.io/prometheus/node-exporter:latest
-    container_name: node_exporter
+    container_name: manager_node_exporter
     command:
       - '--path.rootfs=/host'
     network_mode: host
@@ -12,3 +17,35 @@ services:
     restart: unless-stopped
     volumes:
       - '/:/host:ro,rslave'
+    deploy:
+      placement:
+        constraints:
+         - node.hostname == manager
+  worker1_node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: worker1_node_exporter
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+    deploy:
+      placement:
+        constraints:
+         - node.hostname == worker1
+  worker2_node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: worker2_node_exporter
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+    deploy:
+      placement:
+        constraints:
+         - node.hostname == worker2

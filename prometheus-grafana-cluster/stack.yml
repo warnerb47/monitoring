@@ -6,6 +6,11 @@ volumes:
     driver: local
   grafana-data:
     driver: local
+networks:
+  # frontend:
+  #   external:
+  #     name: imixs-proxy-net 
+  monitoring:
 
 services:
   prometheus:
@@ -23,6 +28,10 @@ services:
       placement:
         constraints:
           - node.role == manager
+    networks:
+      - monitoring
+
+
   grafana:
     image: grafana/grafana-oss:latest
     container_name: grafana
@@ -31,9 +40,23 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
     restart: unless-stopped
-  cadvisor:
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - monitoring
+
+
+
+  ################################################################
+  # The promethes cadvisor 
+  # For each node a separte service need to be added 
+  ################################################################
+  # START cadvisor.....    
+  manager_cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.39.3
-    container_name: cadvisor
+    container_name: manager_cadvisor
     ports:
       - "8080:8080"
     volumes:
@@ -42,12 +65,65 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == manager
     devices:
       - /dev/kmsg
-    
-  node_exporter:
+    networks:
+      - monitoring
+
+
+  worker1_cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.39.3
+    container_name: worker1_cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == worker1
+    devices:
+      - /dev/kmsg
+    networks:
+      - monitoring
+
+
+  worker2_cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.39.3
+    container_name: worker2_cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == worker2
+    devices:
+      - /dev/kmsg
+    networks:
+      - monitoring
+
+  ################################################################
+  # The promethes node-exporter 
+  # For each node a separte service need to be added 
+  ################################################################
+  # START NODE-EXPORTERS.....    
+  manager_node_exporter:
     image: quay.io/prometheus/node-exporter:latest
-    container_name: node_exporter
+    container_name: manager_node_exporter
     command:
       - '--path.rootfs=/host'
     network_mode: host
@@ -58,4 +134,42 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == manager
+         - node.hostname == manager
+    networks:
+      - monitoring
+
+
+  worker1_node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: worker1_node_exporter
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+    deploy:
+      placement:
+        constraints:
+         - node.hostname == worker1
+    networks:
+      - monitoring
+
+
+  worker2_node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: worker2_node_exporter
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+    deploy:
+      placement:
+        constraints:
+         - node.hostname == worker2
+    networks:
+      - monitoring
