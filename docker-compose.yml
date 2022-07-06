@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  ansible:
+    build: .
+    image: warnerb47/swarm-infra:1.0.0
+    container_name: swarm-infra
+    volumes:
+      - C:\\Users\\DELL\\Documents\\practice\\devops\\monitoring\\ansible\\playbooks:/root/playbooks
+      - C:\\Users\\DELL\\Documents\\practice\\devops\\monitoring\\ansible\\config:/etc/ansible
+      - C:\\Users\\DELL\\Documents\\practice\\devops\\monitoring\\terraform:/root/terraform
+      - C:\\Users\\DELL\\.aws:/root/.aws
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+# docker-compose -p swarm-infra up --build -d
+# docker exec -ti swarm-infra /bin/bash
