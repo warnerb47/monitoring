@@ -5,7 +5,7 @@
   become: yes
   vars:
     docker_swarm_port: 2377
-    master_ip: 192.168.33.20
+    master_ip: 3.142.121.92
   tasks:
     - name: install pip3
       apt: 

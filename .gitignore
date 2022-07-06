@@ -2,3 +2,6 @@ vms/.vagrant
 ansible/.ssh
 terraform/config.yml
 .ssh
+terraform/.terraform
+terraform/terraform.tfstate
+ansible/config/hosts

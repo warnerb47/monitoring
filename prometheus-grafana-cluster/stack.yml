@@ -1,6 +1,12 @@
 ---
 version: '3.8'
 
+# sudo docker stack deploy -c monitoring-stack.yml monitoring
+# sudo docker stack rm monitoring
+# manager hostname: ip-172-31-29-189
+# worker1 hostname: ip-172-31-17-7
+# worker2 hostname: ip-172-31-22-109
+
 volumes:
   prometheus-data:
     driver: local
@@ -65,7 +71,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == manager
+          - node.hostname == ip-172-31-29-189
     devices:
       - /dev/kmsg
     networks:
@@ -76,7 +82,7 @@ services:
     image: gcr.io/cadvisor/cadvisor:v0.39.3
     container_name: worker1_cadvisor
     ports:
-      - "8080:8080"
+      - "8081:8080"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -86,7 +92,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == worker1
+          - node.hostname == ip-172-31-17-7
     devices:
       - /dev/kmsg
     networks:
@@ -97,7 +103,7 @@ services:
     image: gcr.io/cadvisor/cadvisor:v0.39.3
     container_name: worker2_cadvisor
     ports:
-      - "8080:8080"
+      - "8082:8080"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -107,7 +113,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == worker2
+          - node.hostname == ip-172-31-22-109
     devices:
       - /dev/kmsg
     networks:
@@ -131,7 +137,7 @@ services:
     deploy:
       placement:
         constraints:
-         - node.hostname == manager
+         - node.hostname == ip-172-31-29-189
     networks:
       - monitoring
 
@@ -149,7 +155,7 @@ services:
     deploy:
       placement:
         constraints:
-         - node.hostname == worker1
+         - node.hostname == ip-172-31-17-7
     networks:
       - monitoring
 
@@ -167,6 +173,6 @@ services:
     deploy:
       placement:
         constraints:
-         - node.hostname == worker2
+         - node.hostname == ip-172-31-22-109
     networks:
       - monitoring
