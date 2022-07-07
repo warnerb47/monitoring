@@ -57,3 +57,19 @@
       template:
         src: ./logstash.conf.j2
         dest: /etc/logstash/pipeline/logstash.conf
+
+    # filebeat
+    - name: create /etc/filebeat/config directory
+      file:
+        path: /etc/filebeat/config
+        state: directory
+    - name: remove filebeat old config
+      file:
+        path: '/etc/filebeat/config/filebeat.yml'
+        state: absent
+    - name: copy new filebeat config
+      template:
+        src: ./filebeat.yml.j2
+        dest: /etc/filebeat/config/filebeat.yml
+
+

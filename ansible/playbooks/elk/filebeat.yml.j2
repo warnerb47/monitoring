@@ -1,0 +1,9 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /nginxLog/*.log
+output.logstash:
+  hosts: ["3.142.45.17:5044"]
+processors:
+  - add_host_metadata: ~
