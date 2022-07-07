@@ -15,7 +15,7 @@
     - name: copy new elasticsearch config
       template:
         src: ./elasticsearch.yml.j2
-        dest: /etc/elasticsearch/config
+        dest: /etc/elasticsearch/config/elasticsearch.yml
 
     # Kibana
     - name: create /etc/Kibana/config directory
@@ -28,8 +28,8 @@
         state: absent
     - name: copy new Kibana config
       template:
-        src: ./Kibana.yml.j2
-        dest: /etc/Kibana/config
+        src: ./kibana.yml.j2
+        dest: /etc/kibana/config/kibana.yml
 
     # logstash
     - name: create /etc/logstash/config directory
@@ -43,7 +43,7 @@
     - name: copy new logstash config
       template:
         src: ./logstash.yml.j2
-        dest: /etc/logstash/config
+        dest: /etc/logstash/config/logstash.yml
     
     - name: create /etc/logstash/pipeline directory
       file:
@@ -56,4 +56,4 @@
     - name: copy new logstash pipeline
       template:
         src: ./logstash.conf.j2
-        dest: /etc/logstash/pipeline
+        dest: /etc/logstash/pipeline/logstash.conf

@@ -12,7 +12,7 @@ RUN apt update && apt install terraform
 
 # configure ssh key
 RUN mkdir /root/.ssh
-COPY ansible/.ssh/ /root/.ssh/
+COPY .ssh/ /root/.ssh/
 RUN chmod 700 /root/.ssh/*
 
 WORKDIR /root
