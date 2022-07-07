@@ -5,3 +5,5 @@ terraform/config.yml
 terraform/.terraform
 terraform/terraform.tfstate
 ansible/config/hosts
+.aws
+ansible/playbooks/deployment

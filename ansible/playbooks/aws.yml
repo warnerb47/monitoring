@@ -1,0 +1,25 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: install unzip
+      apt: 
+        name: unzip
+        state: present 
+    - name: Unarchive aws cli
+      unarchive:
+        src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+        dest: /opt/
+        remote_src: yes
+    - name: Install aws cli
+      command: /opt/aws/install
+      run_once: true
+    - name: set /var/run/docker.sock permission to 666
+      file:
+        path: /var/run/docker.sock
+        mode: '0666'
+    - name: copy aws credentials
+      copy:
+        src: /root/.aws
+        dest: /home/admin/
