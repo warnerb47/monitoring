@@ -1,0 +1,59 @@
+---
+- hosts: master
+  gather_facts: yes
+  become: yes
+  tasks:
+    # elasticsearch
+    - name: create /etc/elasticsearch/config directory
+      file:
+        path: /etc/elasticsearch/config
+        state: directory
+    - name: remove elasticsearch old config
+      file:
+        path: '/etc/elasticsearch/config/elasticsearch.yml'
+        state: absent
+    - name: copy new elasticsearch config
+      template:
+        src: ./elasticsearch.yml.j2
+        dest: /etc/elasticsearch/config
+
+    # Kibana
+    - name: create /etc/Kibana/config directory
+      file:
+        path: /etc/Kibana/config
+        state: directory
+    - name: remove Kibana old config
+      file:
+        path: '/etc/Kibana/config/Kibana.yml'
+        state: absent
+    - name: copy new Kibana config
+      template:
+        src: ./Kibana.yml.j2
+        dest: /etc/Kibana/config
+
+    # logstash
+    - name: create /etc/logstash/config directory
+      file:
+        path: /etc/logstash/config
+        state: directory
+    - name: remove logstash old config
+      file:
+        path: '/etc/logstash/config/logstash.yml'
+        state: absent
+    - name: copy new logstash config
+      template:
+        src: ./logstash.yml.j2
+        dest: /etc/logstash/config
+    
+    - name: create /etc/logstash/pipeline directory
+      file:
+        path: /etc/logstash/pipeline
+        state: directory
+    - name: remove logstash old pipeline
+      file:
+        path: '/etc/logstash/pipeline/logstash.conf'
+        state: absent
+    - name: copy new logstash pipeline
+      template:
+        src: ./logstash.conf.j2
+        dest: /etc/logstash/pipeline
