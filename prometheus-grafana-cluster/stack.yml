@@ -3,9 +3,9 @@ version: '3.8'
 
 # sudo docker stack deploy -c monitoring-stack.yml monitoring
 # sudo docker stack rm monitoring
-# manager hostname: ip-172-31-29-189
-# worker1 hostname: ip-172-31-17-7
-# worker2 hostname: ip-172-31-22-109
+# manager hostname: ip-172-31-27-212
+# worker1 hostname: ip-172-31-21-65
+# worker2 hostname: ip-172-31-22-172
 
 volumes:
   prometheus-data:
@@ -71,7 +71,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == ip-172-31-29-189
+          - node.hostname == ip-172-31-27-212
     devices:
       - /dev/kmsg
     networks:
@@ -92,7 +92,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == ip-172-31-17-7
+          - node.hostname == ip-172-31-21-65
     devices:
       - /dev/kmsg
     networks:
@@ -113,7 +113,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == ip-172-31-22-109
+          - node.hostname == ip-172-31-22-172
     devices:
       - /dev/kmsg
     networks:
@@ -137,7 +137,7 @@ services:
     deploy:
       placement:
         constraints:
-         - node.hostname == ip-172-31-29-189
+         - node.hostname == ip-172-31-27-212
     networks:
       - monitoring
 
@@ -155,7 +155,7 @@ services:
     deploy:
       placement:
         constraints:
-         - node.hostname == ip-172-31-17-7
+         - node.hostname == ip-172-31-21-65
     networks:
       - monitoring
 
@@ -173,6 +173,6 @@ services:
     deploy:
       placement:
         constraints:
-         - node.hostname == ip-172-31-22-109
+         - node.hostname == ip-172-31-22-172
     networks:
       - monitoring
