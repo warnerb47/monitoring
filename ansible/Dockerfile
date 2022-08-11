@@ -8,5 +8,5 @@ COPY playbooks/ /root/playbooks/
 WORKDIR /root/playbooks
 
 
-# docker build -t monitoring .
-# docker run --rm -ti monitoring bash
+# docker build -t config-management .
+# docker run --rm -ti config-management bash

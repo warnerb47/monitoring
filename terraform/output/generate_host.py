@@ -2,12 +2,9 @@ def extract_hosts():
     import json
     with open('terraform-output.json') as json_file:
         data = json.load(json_file)
-    # print(data['ec2_instances_created']['value'])
     hosts = {'masters': [], 'workers': []}
     ec2_instances_created = data['ec2_instances_created']['value']
     for key in ec2_instances_created:
-        # print(ec2_instances_created[key]['public_ip'])
-        # print(ec2_instances_created[key]['tags']['Name'])
         if('master' in ec2_instances_created[key]['tags']['Name']):
             hosts['masters'].append({
                 'public_ip': ec2_instances_created[key]['public_ip'],
@@ -20,9 +17,7 @@ def extract_hosts():
             })
     return hosts
 
-def generate_inventory(hosts, file_name='hosts'):
-    # print(hosts['masters'])
-    # print(hosts['workers'])
+def generate_inventory(hosts, file_name='hosts', ansible_user='papeDiop', docker_swarm_port='2377'):
     f = open(file_name, "w")
     f.write("[masters]\n")
     for master in hosts['masters']:
@@ -35,9 +30,11 @@ def generate_inventory(hosts, file_name='hosts'):
 
     f.write('[all:vars]\n')
     f.write('ansible_python_interpreter=/usr/bin/python3\n')
-    f.write('ansible_user=admin\n')
+    f.write('ansible_user={ansible_user}\n'.format(ansible_user=ansible_user))
+    f.write('master_ip={master_ip}\n'.format(master_ip=hosts['masters'][0]['public_ip']))
+    f.write('docker_swarm_port={docker_swarm_port}\n'.format(docker_swarm_port=docker_swarm_port))
     f.close()
-    print('ansible inventory generated check /root/playbooks/output/hosts')
+    print('ansible inventory generated check /root/terraform/output/hosts')
 
 def main():
     hosts = extract_hosts()
