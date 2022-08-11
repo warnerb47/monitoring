@@ -17,7 +17,7 @@ def extract_hosts():
             })
     return hosts
 
-def generate_inventory(hosts, file_name='hosts', ansible_user='papeDiop', docker_swarm_port='2377'):
+def generate_inventory(hosts, file_name='hosts', ansible_user='admin', docker_swarm_port='2377'):
     f = open(file_name, "w")
     f.write("[masters]\n")
     for master in hosts['masters']:
@@ -34,11 +34,19 @@ def generate_inventory(hosts, file_name='hosts', ansible_user='papeDiop', docker
     f.write('master_ip={master_ip}\n'.format(master_ip=hosts['masters'][0]['public_ip']))
     f.write('docker_swarm_port={docker_swarm_port}\n'.format(docker_swarm_port=docker_swarm_port))
     f.close()
-    print('ansible inventory generated check /root/terraform/output/hosts')
+    print('ansible inventory generated check /etc/ansible/hosts')
+
+def update_ansible_config():
+    import shutil
+    import os
+    if(os.path.exists('/etc/ansible/hosts_old')):
+        os.remove("/etc/ansible/hosts_old")
+    shutil.copy('/root/terraform/output/hosts', '/etc/ansible/hosts')
 
 def main():
     hosts = extract_hosts()
     generate_inventory(hosts)
+    update_ansible_config()
 
 main()
 
